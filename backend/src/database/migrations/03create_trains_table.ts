@@ -4,7 +4,7 @@ export default class extends BaseSchema {
   protected tableName = 'trains'
 
   public async up() {
-    this.schema.createTable(this.tableName, (table) => {
+    await this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('train_number', 10).notNullable().unique() // e.g. 12951
       table.string('name', 100).notNullable()
@@ -39,6 +39,6 @@ export default class extends BaseSchema {
   }
 
   public async down() {
-    this.schema.dropTable(this.tableName)
+   return this.schema.dropTable(this.tableName)
   }
 }
