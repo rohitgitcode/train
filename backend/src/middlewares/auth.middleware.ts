@@ -26,6 +26,26 @@ export function authenticate(req: Request, _res: Response, next: NextFunction): 
   }
 }
 
+export function requireAdmin(req: Request, res: Response, next: NextFunction): void {
+  if (!req.user) {
+    res.status(401).json({
+      success: false,
+      message: 'Unauthorized: Authentication required',
+    })
+    return
+  }
+
+  if (req.user.role !== UserRole.ADMIN && (req.user.role as string) !== 'ADMIN') {
+    res.status(403).json({
+      success: false,
+      message: 'Forbidden: Admin access required',
+    })
+    return
+  }
+
+  next()
+}
+
 export function authorize(...allowedRoles: UserRole[]) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.user) {

@@ -1,9 +1,10 @@
-import { BaseModel, column, beforeSave } from '@adonisjs/lucid/orm'
+import { BaseModel, column, beforeSave, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import argon2 from 'argon2'
 import { UserRole } from '../constants/roles.js'
 import { db } from '../config/database.js'
-
+import Booking from './Booking.js'
 
 BaseModel.useAdapter(db.modelAdapter())
 
@@ -30,6 +31,11 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => Booking, {
+    foreignKey: 'userId',
+  })
+  declare bookings: HasMany<typeof Booking>
 
   @beforeSave()
   public static async hashPassword(user: User) {

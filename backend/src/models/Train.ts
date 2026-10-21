@@ -5,6 +5,7 @@ import Station from './Station'
 import TrainSchedule from './TrainSchedule'
 import Coach from './Coach'
 import SeatInventory from './SeatInventory'
+import Booking from './Booking.js'
 
 export default class Train extends BaseModel {
   @column({ isPrimary: true })
@@ -62,4 +63,9 @@ export default class Train extends BaseModel {
     foreignKey: 'trainId',
   })
   public inventories: HasMany<typeof SeatInventory>
+
+  @hasMany(() => Booking, {
+    foreignKey: 'trainId',
+  })
+  public bookings: HasMany<typeof Booking>
 }
